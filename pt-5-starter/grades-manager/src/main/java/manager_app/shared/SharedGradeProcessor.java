@@ -15,6 +15,7 @@ public class SharedGradeProcessor implements IGradeProcessor {
 
     @Override
     public String processGrades(String source, GradeSheetType mode) {
+        System.out.println("handled in shared profile");
         return parseResolver.parseGradeSheet(source, mode);
     }
 }

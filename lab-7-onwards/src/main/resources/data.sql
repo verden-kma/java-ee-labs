@@ -45,3 +45,7 @@ INSERT INTO BOOK_TO_AUTHOR (BOOK_ID, AUTHORS) VALUES
 ('10', 'Author4'),
 ('11', 'Author8'),
 ('12', 'Author9');
+
+INSERT INTO CUSTOMER (username, email, enpassword) VALUES
+('user1', 'user1@ukr.net', 'MTExMQ=='),
+('user2', 'user2@ukr.net', 'MTExMQ==');

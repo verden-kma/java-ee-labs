@@ -1,8 +1,8 @@
 package edu.ukma.javaee.lab7onwards.services;
 
-import edu.ukma.javaee.lab7onwards.models.BookFilter;
-import edu.ukma.javaee.lab7onwards.models.BookRequest;
-import edu.ukma.javaee.lab7onwards.models.BookResponse;
+import edu.ukma.javaee.lab7onwards.models.book.BookFilter;
+import edu.ukma.javaee.lab7onwards.models.book.BookRequest;
+import edu.ukma.javaee.lab7onwards.models.book.BookResponse;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;

@@ -1,5 +1,6 @@
-package edu.ukma.javaee.lab7onwards.models;
+package edu.ukma.javaee.lab7onwards.models.customer;
 
+import edu.ukma.javaee.lab7onwards.models.book.Book;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,4 +20,7 @@ public class Customer {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> favoriteBooks;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private CustomerRole role;
 }

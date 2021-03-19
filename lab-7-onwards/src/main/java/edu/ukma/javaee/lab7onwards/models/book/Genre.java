@@ -1,4 +1,4 @@
-package edu.ukma.javaee.lab7onwards.models;
+package edu.ukma.javaee.lab7onwards.models.book;
 
 public enum Genre {
     FICTION,

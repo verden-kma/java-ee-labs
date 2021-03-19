@@ -1,7 +1,7 @@
 package edu.ukma.javaee.lab7onwards.specifications;
 
-import edu.ukma.javaee.lab7onwards.models.Book;
 import edu.ukma.javaee.lab7onwards.models.Book_;
+import edu.ukma.javaee.lab7onwards.models.book.Book;
 import org.springframework.data.jpa.domain.Specification;
 
 public class BookSpecs {

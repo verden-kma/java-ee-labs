@@ -1,9 +1,10 @@
 package edu.ukma.javaee.lab7onwards.services.implementations;
 
-import edu.ukma.javaee.lab7onwards.models.*;
+import edu.ukma.javaee.lab7onwards.models.book.*;
 import edu.ukma.javaee.lab7onwards.repositories.BooksRepo;
 import edu.ukma.javaee.lab7onwards.services.IBookService;
 import edu.ukma.javaee.lab7onwards.specifications.BookSpecs;
+import edu.ukma.javaee.lab7onwards.utils.BookUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -58,16 +59,8 @@ public class BookService implements IBookService {
 //            }
         }
         return booksRepo.findAll(specification, pr).stream()
-                .map(BookService::toBookResponse).collect(Collectors.toList());
+                .map(BookUtils::toBookResponse).collect(Collectors.toList());
     }
 
-    private static BookResponse toBookResponse(Book book) {
-        return BookResponse.builder()
-                .isbn(book.getIsbn())
-                .title(book.getTitle())
-                .authors(book.getAuthors())
-                .genres(book.getGenres())
-                .dateAdded(book.getDateAdded())
-                .build();
-    }
+
 }

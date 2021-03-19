@@ -1,5 +1,6 @@
-package edu.ukma.javaee.lab7onwards.models;
+package edu.ukma.javaee.lab7onwards.models.book;
 
+import edu.ukma.javaee.lab7onwards.models.customer.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -33,6 +33,10 @@
     <input type="submit" value="Search" class="btn btn-info">
 </form>
 
+<button onclick="handleFavorites(event)" th:if="${#authorization.expression('hasAuthority(''MNG_FAVORITES'')')}">Load
+    favorites
+</button>
+
 <table id="bookTable" class="table">
     <thead>
     <tr>

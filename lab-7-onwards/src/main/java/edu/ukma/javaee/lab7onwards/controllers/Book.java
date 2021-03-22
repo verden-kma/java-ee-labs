@@ -26,8 +26,7 @@ public class Book {
     }
 
     @GetMapping
-    public List<BookResponse> getBooks(@RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(required = false) String isbn,
+    public List<BookResponse> getBooks(@RequestParam(required = false) String isbn,
                                        @RequestParam(required = false) String titlePrefix,
                                        Principal principal) {
         if (isbn != null) {
@@ -39,6 +38,6 @@ public class Book {
         BookFilter filter = new BookFilter();
         if (titlePrefix != null)
             filter.setTitlePrefix(titlePrefix);
-        return bookService.getBooks(PageRequest.of(page, 10), filter, principal == null ? null : principal.getName());
+        return bookService.getBooks(PageRequest.of(0, 100_000), filter, principal == null ? null : principal.getName());
     }
 }

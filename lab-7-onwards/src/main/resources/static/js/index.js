@@ -88,8 +88,6 @@ function fillContent(tableBody, hasFavorites) {
         url: "/books",
         type: 'GET',
         success: (resp) => {
-            console.log(resp)
-
             resp.filter(x => x !== null).forEach(datum => {
                 const maybeCell = hasFavorites
                     ? `<td><input id="${datum.isbn}-fav" type="checkbox" onChange="handleDoFavorite(${datum.isbn})" 
@@ -114,15 +112,43 @@ function fillContent(tableBody, hasFavorites) {
 function handleDoFavorite(isbn) {
     let favElem = document.getElementById(isbn + "-fav");
 
-    const ajaxMethod = favElem.value === 'true' ? "delete" : "post";
+    const ajaxMethod = favElem.checked ? "post" : "delete";
     $.ajax(
         {
             url: `/books/favorites/${isbn}`,
             type: ajaxMethod,
-            success: () => {
-                favElem.value = !favElem.value;
-            },
             error: (message) => console.log(message)
         }
     )
+}
+
+// wet
+function handleFavorites(event) {
+    const tableBody = document.getElementById("bookTable").getElementsByTagName("tbody")[0];
+    tableBody.innerHTML = '';
+    const hasFavorites = document.getElementById("favorite-column") !== null;
+
+    $.ajax({
+        url: "/books/favorites",
+        type: 'GET',
+        success: (resp) => {
+            resp.filter(x => x !== null).forEach(datum => {
+                const maybeCell = hasFavorites
+                    ? `<td><input id="${datum.isbn}-fav" type="checkbox" onChange="handleDoFavorite(${datum.isbn})" 
+                        ${datum.isFavorited && 'checked'}/></td>`
+                    : "";
+                tableBody.innerHTML +=
+                    `
+                <tr>
+                    <td>${datum.isbn}</td>
+                    <td>${datum.title}</td>
+                    <td>${datum.authors.join(",")}</td>
+                    <td>${datum.dateAdded}</td>
+                    <td>${datum.genres.join(',')}</td>
+                    ${maybeCell}                  
+                </tr>
+                `;
+            })
+        }
+    })
 }

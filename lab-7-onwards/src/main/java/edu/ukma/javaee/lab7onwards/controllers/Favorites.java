@@ -18,6 +18,7 @@ public class Favorites {
 
     @PostMapping("/{isbn}")
     public void addToFavorite(@PathVariable String isbn, Principal principal) {
+        System.out.println("add to fav " + isbn);
         customerService.addFavorite(principal.getName(), isbn);
     }
 
@@ -28,6 +29,7 @@ public class Favorites {
 
     @DeleteMapping("/{isbn}")
     public void deleteFromFavorites(@PathVariable String isbn, Principal principal) {
+        System.out.println("remove from fav " + isbn);
         customerService.removeFavorite(principal.getName(), isbn);
     }
 }

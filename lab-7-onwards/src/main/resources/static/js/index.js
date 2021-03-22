@@ -58,7 +58,7 @@ function handleNewBook(event) {
                     <td>${authors}</td>
                     <td>${formatDate(new Date())}</td>
                     <td>${genres}</td>
-                    <td><input type="checkbox" onchange="handleFavorite(${isbn})"/></td>
+                    <td><input type="checkbox" onchange="handleDoFavorite(${isbn})"/></td>
                 </tr>
             `;
         }),
@@ -88,9 +88,12 @@ function fillContent(tableBody, hasFavorites) {
         url: "/books",
         type: 'GET',
         success: (resp) => {
+            console.log(resp)
+
             resp.filter(x => x !== null).forEach(datum => {
                 const maybeCell = hasFavorites
-                    ? `<td><input id="${datum.isbn}-fav" type="checkbox" onChange="handleFavorite(${datum.isbn})" value="${datum.isFavorited}"/></td>`
+                    ? `<td><input id="${datum.isbn}-fav" type="checkbox" onChange="handleDoFavorite(${datum.isbn})" 
+                        ${datum.isFavorited && 'checked'}/></td>`
                     : "";
                 tableBody.innerHTML +=
                     `
@@ -108,13 +111,10 @@ function fillContent(tableBody, hasFavorites) {
     })
 }
 
-function handleFavorite(isbn) {
+function handleDoFavorite(isbn) {
     let favElem = document.getElementById(isbn + "-fav");
 
-    let favForm = new FormData();
-    favForm.append("isbn", isbn);
-
-    const ajaxMethod = favElem.value ? "delete" : "post";
+    const ajaxMethod = favElem.value === 'true' ? "delete" : "post";
     $.ajax(
         {
             url: `/books/favorites/${isbn}`,

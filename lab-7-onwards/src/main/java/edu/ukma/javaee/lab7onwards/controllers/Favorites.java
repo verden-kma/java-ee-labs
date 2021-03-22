@@ -10,7 +10,8 @@ import java.security.Principal;
 import java.util.List;
 
 @PreAuthorize("hasAuthority(MNG_FAVORITES)")
-@RestController("/books/favorites")
+@RestController
+@RequestMapping("/books/favorites")
 @RequiredArgsConstructor
 public class Favorites {
     private final ICustomerService customerService;

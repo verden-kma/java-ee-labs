@@ -15,16 +15,17 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/books")
 public class Book {
     private final IBookService bookService;
 
     @PreAuthorize("hasAuthority(ADD_BOOKS)")
-    @PostMapping("/books")
+    @PostMapping
     public void addBook(@ModelAttribute BookRequest newBook) {
         bookService.addBook(newBook);
     }
 
-    @GetMapping("/books")
+    @GetMapping
     public List<BookResponse> getBooks(@RequestParam(defaultValue = "0") int page,
                                        @RequestParam(required = false) String isbn,
                                        @RequestParam(required = false) String titlePrefix,

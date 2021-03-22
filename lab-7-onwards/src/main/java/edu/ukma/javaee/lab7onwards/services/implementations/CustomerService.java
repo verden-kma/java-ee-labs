@@ -42,6 +42,7 @@ public class CustomerService implements ICustomerService {
     public void addFavorite(String username, String isbn) {
         Customer customer = customersRepo.findByUsername(username);
         customer.getFavoriteBooks().add(booksRepo.findById(isbn).orElseThrow(() -> new NoSuchBookException(isbn)));
+        customersRepo.save(customer);
     }
 
     @Override
@@ -54,5 +55,6 @@ public class CustomerService implements ICustomerService {
     public void removeFavorite(String username, String isbn) {
         Customer customer = customersRepo.findByUsername(username);
         customer.getFavoriteBooks().remove(booksRepo.findById(isbn).orElseThrow(() -> new NoSuchBookException(isbn)));
+        customersRepo.save(customer);
     }
 }

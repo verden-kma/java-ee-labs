@@ -46,6 +46,19 @@ INSERT INTO BOOK_TO_AUTHOR (BOOK_ID, AUTHORS) VALUES
 ('11', 'Author8'),
 ('12', 'Author9');
 
-INSERT INTO CUSTOMER (username, email, enpassword) VALUES
-('user1', 'user1@ukr.net', 'MTExMQ=='),
-('user2', 'user2@ukr.net', 'MTExMQ==');
+INSERT INTO customer_role (role_id, name) VALUES
+(1, 'ADMIN'),
+(2, 'CUSTOMER');
+
+INSERT INTO customer_permission (permission_id, permission) VALUES
+(1, 'ADD_BOOKS'),
+(2, 'MNG_FAVORITES');
+
+INSERT INTO role_to_permission (role_id, permission_id) VALUES
+(1, 1),
+(1, 2),
+(2, 2);
+
+INSERT INTO CUSTOMER (username, email, enpassword, role_id) VALUES
+('user1', 'user1@ukr.net', 'MTExMQ==', 1),
+('user2', 'user2@ukr.net', 'MTExMQ==', 2);

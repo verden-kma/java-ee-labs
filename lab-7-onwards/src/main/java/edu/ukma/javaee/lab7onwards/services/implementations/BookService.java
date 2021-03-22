@@ -2,6 +2,7 @@ package edu.ukma.javaee.lab7onwards.services.implementations;
 
 import edu.ukma.javaee.lab7onwards.models.book.*;
 import edu.ukma.javaee.lab7onwards.repositories.BooksRepo;
+import edu.ukma.javaee.lab7onwards.repositories.CustomersRepo;
 import edu.ukma.javaee.lab7onwards.services.IBookService;
 import edu.ukma.javaee.lab7onwards.specifications.BookSpecs;
 import edu.ukma.javaee.lab7onwards.utils.BookUtils;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BookService implements IBookService {
     private final BooksRepo booksRepo;
+    private final CustomersRepo customersRepo;
 
     @Override
     public void addBook(BookRequest bookRequest) {
@@ -34,19 +36,14 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public BookResponse getBook(String isbn) {
+    public BookResponse getBook(String isbn, String username) {
         Optional<Book> maybeBook = booksRepo.findById(isbn);
-        return maybeBook.map(book -> BookResponse.builder()
-                .authors(book.getAuthors())
-                .isbn(isbn)
-                .title(book.getTitle())
-                .genres(book.getGenres())
-                .dateAdded(book.getDateAdded())
-                .build()).orElse(null);
+        return maybeBook.map(x -> BookUtils.toBookResponse(x, customersRepo::existsByUsernameAndFavoriteBooksContains,
+                username)).orElse(null);
     }
 
     @Override
-    public List<BookResponse> getBooks(PageRequest pr, @Nullable BookFilter bookFilter) {
+    public List<BookResponse> getBooks(PageRequest pr, @Nullable BookFilter bookFilter, String username) {
         Specification<Book> specification = Specification.where(null);
         if (bookFilter != null) {
             if (bookFilter.getTitlePrefix() != null)
@@ -59,7 +56,8 @@ public class BookService implements IBookService {
 //            }
         }
         return booksRepo.findAll(specification, pr).stream()
-                .map(BookUtils::toBookResponse).collect(Collectors.toList());
+                .map(x -> BookUtils.toBookResponse(x, customersRepo::existsByUsernameAndFavoriteBooksContains,
+                        username)).collect(Collectors.toList());
     }
 
 

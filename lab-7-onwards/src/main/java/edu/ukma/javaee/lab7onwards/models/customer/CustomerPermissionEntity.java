@@ -4,8 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity
 @Data
+@Entity
+@Table(name = "customer_permission")
 public class CustomerPermissionEntity {
     @Id
     @Column(name = "permission_id")
@@ -14,3 +15,4 @@ public class CustomerPermissionEntity {
     @Enumerated(EnumType.STRING)
     private CustomerPermission permission;
 }
+

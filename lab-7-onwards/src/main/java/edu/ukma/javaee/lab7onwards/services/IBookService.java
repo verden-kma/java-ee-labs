@@ -10,7 +10,7 @@ import java.util.List;
 public interface IBookService {
     void addBook(BookRequest bookRequest);
 
-    BookResponse getBook(String isbn);
+    BookResponse getBook(String isbn, String username);
 
-    List<BookResponse> getBooks(PageRequest pr, BookFilter bookFilter);
+    List<BookResponse> getBooks(PageRequest pr, BookFilter bookFilter, String username);
 }

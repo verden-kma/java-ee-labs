@@ -16,4 +16,5 @@ public interface CustomersRepo extends JpaRepository<Customer, String> {
     @Query("SELECT cust.favoriteBooks FROM Customer cust WHERE cust.username=:customer_id")
     List<Book> findFavoriteBooks(@Param("customer_id") String username);
 
+    boolean existsByUsernameAndFavoriteBooksContains(String name, Book b);
 }

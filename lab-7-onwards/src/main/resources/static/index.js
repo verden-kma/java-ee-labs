@@ -1,15 +1,18 @@
 window.onload = () => {
     document.getElementById("searchForm").addEventListener("submit", handleSearch);
-    document.getElementById("addBookForm").addEventListener("submit", handleNewBook);
+    const addBookForm = document.getElementById("addBookForm");
+    if (addBookForm) addBookForm.addEventListener("submit", handleNewBook);
 
-    let tableBody = document.getElementById("bookTable").getElementsByTagName("tbody")[0];
-    fillContent(tableBody);
+    const tableBody = document.getElementById("bookTable").getElementsByTagName("tbody")[0];
+    const hasFavorites = document.getElementById("favorite-column") !== null;
+    fillContent(tableBody, hasFavorites);
 }
 
 function handleSearch(event) {
     const searchText = document.getElementById("searchInput").value;
     const searchMode = document.querySelector('input[name="searchMode"]:checked').value;
-    $.get(`/search/${searchMode}`, {[searchMode]: searchText},
+
+    $.get(`/books`, {[searchMode]: searchText},
         (resp) => {
             if (resp === null) return;
             const tableBody = document.getElementById("bookTable").getElementsByTagName("tbody")[0];
@@ -20,10 +23,9 @@ function handleSearch(event) {
                 <tr>
                     <td>${datum.isbn}</td>
                     <td>${datum.title}</td>
-                    <td>${datum.author}</td>
+                    <td>${datum.authors.join(',')}</td>
                     <td>${datum.dateAdded}</td>
                     <td>${datum.genres.join(',')}</td>
-
                 </tr>
                 `;
             })
@@ -36,14 +38,16 @@ function handleNewBook(event) {
     let bookForm = new FormData();
     const isbn = document.getElementById("newBookIsbn").value;
     const title = document.getElementById("newBookTitle").value;
-    const author = document.getElementById("newBookAuthor").value;
+    const authors = document.getElementById("newBookAuthors").value;
+    const genres = document.getElementById("newGenres").value;
 
     bookForm.append('isbn', isbn);
-    bookForm.append('title', isbn);
-    bookForm.append('author', isbn);
+    bookForm.append('title', title);
+    bookForm.append('authors', authors.split(/\s+/));
+    bookForm.append('genres', genres.split(/\s+/));
 
     $.ajax({
-        url: "/book", type: 'POST', data: bookForm,
+        url: "/books", type: 'POST', data: bookForm,
         processData: false,
         contentType: false,
         success: (resp => {
@@ -51,8 +55,10 @@ function handleNewBook(event) {
                 <tr>
                     <td>${isbn}</td>
                     <td>${title}</td>
-                    <td>${author}</td>
+                    <td>${authors}</td>
                     <td>${formatDate(new Date())}</td>
+                    <td>${genres}</td>
+                    <td><input type="checkbox" onchange="handleFavorite(${isbn})"/></td>
                 </tr>
             `;
         }),
@@ -64,7 +70,7 @@ function handleNewBook(event) {
 }
 
 function formatDate(date) {
-    var d = new Date(date),
+    let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
@@ -77,22 +83,46 @@ function formatDate(date) {
     return [year, month, day].join('-');
 }
 
-function fillContent(tableBody) {
+function fillContent(tableBody, hasFavorites) {
     $.ajax({
         url: "/books",
         type: 'GET',
         success: (resp) => {
-            resp.forEach(datum => {
+            resp.filter(x => x !== null).forEach(datum => {
+                const maybeCell = hasFavorites
+                    ? `<td><input id="${datum.isbn}-fav" type="checkbox" onChange="handleFavorite(${datum.isbn})" value="${datum.isFavorited}"/></td>`
+                    : "";
                 tableBody.innerHTML +=
                     `
                 <tr>
                     <td>${datum.isbn}</td>
                     <td>${datum.title}</td>
-                    <td>${datum.author}</td>
+                    <td>${datum.authors.join(",")}</td>
                     <td>${datum.dateAdded}</td>
+                    <td>${datum.genres.join(',')}</td>
+                    ${maybeCell}                  
                 </tr>
                 `;
             })
         }
     })
+}
+
+function handleFavorite(isbn) {
+    let favElem = document.getElementById(isbn + "-fav");
+
+    let favForm = new FormData();
+    favForm.append("isbn", isbn);
+
+    const ajaxMethod = favElem.value ? "delete" : "post";
+    $.ajax(
+        {
+            url: `/books/favorites/${isbn}`,
+            type: ajaxMethod,
+            success: () => {
+                favElem.value = !favElem.value;
+            },
+            error: (message) => console.log(message)
+        }
+    )
 }

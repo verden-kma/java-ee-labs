@@ -20,7 +20,7 @@ public class Customer {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> favoriteBooks;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
-    private CustomerRole role;
+    private CustomerRoleEntity role;
 }

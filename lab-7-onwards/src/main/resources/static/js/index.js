@@ -63,7 +63,7 @@ function handleNewBook(event) {
             `;
         }),
         error: (message) => {
-            alert("Error occurred!" + message);
+            alert("Error occurred!\n" + message.responseText);
         }
     });
     event.preventDefault();
@@ -90,7 +90,7 @@ function fillContent(tableBody, hasFavorites) {
         success: (resp) => {
             resp.filter(x => x !== null).forEach(datum => {
                 const maybeCell = hasFavorites
-                    ? `<td><input id="${datum.isbn}-fav" type="checkbox" onChange="handleDoFavorite(${datum.isbn})" 
+                    ? `<td><input id="${datum.isbn}-fav" type="checkbox" onChange="handleDoFavorite('${datum.isbn}')" 
                         ${datum.isFavorited && 'checked'}/></td>`
                     : "";
                 tableBody.innerHTML +=

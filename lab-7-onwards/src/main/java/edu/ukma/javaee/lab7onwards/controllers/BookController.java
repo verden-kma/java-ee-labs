@@ -7,8 +7,11 @@ import edu.ukma.javaee.lab7onwards.services.IBookService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +19,14 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/books")
-public class Book {
+@Validated
+public class BookController {
     private final IBookService bookService;
 
     @PreAuthorize("hasAuthority(ADD_BOOKS)")
     @PostMapping
-    public void addBook(@ModelAttribute BookRequest newBook) {
+    public void addBook(@Valid @ModelAttribute BookRequest newBook, BindingResult bindingResult) {
+        System.out.println(bindingResult);
         bookService.addBook(newBook);
     }
 
